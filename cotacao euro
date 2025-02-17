@@ -1,0 +1,53 @@
+# Bot para extrair a cotação do Euro (EUR-BRL)
+import requests
+from bs4 import BeautifulSoup
+import csv
+from datetime import datetime
+
+
+# Função para formatar a cotação corretamente
+def formatar_cotacao(cotacao):
+    # Remove os pontos que são separadores de milhares
+    cotacao_sem_milhar = cotacao.replace('.', '')   
+    # Substitui a vírgula por um ponto para representar o separador decimal
+    return float(cotacao_sem_milhar.replace(',', '.'))
+
+# Função para extrair a cotação do Euro
+def extrair_cotacao_euro():
+    url = 'https://www.google.com/finance/quote/EUR-BRL'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Encontra o elemento que contém a cotação
+    cotacao_elemento = soup.find('div', class_='YMlKec fxKbKc')
+    if not cotacao_elemento:
+        raise ValueError("Não foi possível encontrar a cotação do Euro.")
+
+    cotacao = cotacao_elemento.text.strip()
+    return cotacao
+
+# Função principal
+def main():
+    try:
+        # Extrair a cotação do Euro
+        cotacao = extrair_cotacao_euro()
+        print(f'Cotação atual do Euro (EUR-BRL): R$ {cotacao}')
+
+        # Formatar a cotação para evitar erros de conversão
+        cotacao_float = formatar_cotacao(cotacao)
+
+        # Salvar resultados em CSV diariamente
+        with open('cotacoes_EUR_BRL.csv', 'a') as arquivo:
+            writer = csv.writer(arquivo)
+            writer.writerow([datetime.now().strftime('%d/%m/%Y'), cotacao_float])
+
+        # Enviar alerta se a cotação ultrapassar um valor
+        if cotacao_float > 6.0:  # Altere o valor de alerta conforme necessário
+            print("A cotação do Euro ultrapassou R$ 6.0! Enviando alerta...")
+            # Aqui você pode adicionar o código para enviar e-mail ou SMS
+    except Exception as e:
+        print(f"Erro: {e}")
+
+# Executar o script
+if __name__ == '__main__':
+    main()
