@@ -9,7 +9,7 @@ Este projeto é uma aplicação em tempo real que utiliza WebSocket para realiza
 
 O servidor é implementado em Python usando a biblioteca websockets.
 Ele escuta conexões na porta 8765 e aguarda que clientes se conectem.
-Quando um cliente envia um valor em Euro, o servidor:Obtém a cotação atual do Euro (EUR-BRL) usando a API do Google Finance ou outra fonte confiável.
+Quando um cliente envia um valor em Euro, o servidor obtém a cotação atual do Euro (EUR-BRL) usando a API do Google Finance ou outra fonte confiável.
 Realiza a conversão do valor enviado pelo cliente.
 Retorna o valor convertido em Reais ao cliente.
 
