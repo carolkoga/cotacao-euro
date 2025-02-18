@@ -35,11 +35,10 @@ def main():
             writer = csv.writer(arquivo)
             writer.writerow([datetime.now().strftime('%d/%m/%Y'), cotacao_float])
 
-        # Enviar alerta se a cotação ultrapassar um valor
         if cotacao_float > 6.0:
             print("A cotação do Euro ultrapassou R$ 6.0! Enviando alerta...")
     except Exception as e:
         print(f"Erro: {e}")
-        
+
 if __name__ == '__main__':
     main()
